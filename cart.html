@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Cart</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<script src="https://unpkg.com/cart-localstorage@1.1.4/dist/cart-localstorage.min.js" type="text/javascript"></script>
+	</head>
+	<body onload="loadCounter()" class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><img class="logoImg" src="images/Logo.jpeg"></a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+				<ul class="links">
+							<li class="active"><a href="index.html">Home</a></li>
+							<li><a href="AboutUs.html">About us</a></li>
+							<li><a href="policy.html">Our policy</a></li>
+							
+						</ul>
+			
+					</nav>                
+                
+				<!-- Main -->
+					<div id="main">
+                            	<div class="card mb-4 shadow-sm">
+			<div class="card-header">
+				<h2>Cart</h2>
+			</div>
+			<div style="overflow-x:auto;" class="card-body">
+				<table class="table">
+					<tbody class="cart">
+					</tbody>
+					<tfoot>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td class="text-right">Total: <strong class="total"></strong></td>
+						<td></td>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+    <div id="checkout" style="text-align: center; display: none" >
+	<div  id="paypal-button-container"></div>
+    </div>
+<div><p style="color: white">>>>>>>></p></div>
+					</div>
+
+						<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Wellsganic Organic Skincare</li><li>Design: <a href="#">Joey Williamson</a></li></ul>
+					</div>
+			</div>
+<script>
+		function renderCart(items) {
+			const $cart = document.querySelector(".cart")
+			const $total = document.querySelector(".total")
+                var item=items.map;
+			$cart.innerHTML = items.map((item) =>
+                                        `
+					<tr>
+						<td>#${item.id}</td>
+						<td>${item.name}</td>
+						<td onclick="addCounter(${item.quantity})">${item.quantity}</td>
+						<td style="width: 60px;">	
+							<button type="button" class="btn btn-block btn-sm btn-outline-primary"
+								onClick="cartLS.quantity(${item.id},-1),removeCounter()">-</button>
+						</td>
+						<td style="width: 60px;">	
+							<button type="button" class="btn btn-block btn-sm btn-outline-primary"
+                                onClick="cartLS.quantity(${item.id},1),addCounter()">+</button>	
+						</td>
+						<td class="text-right">£${item.price}</td>
+						<td class="text-right"><Button class="btn btn-primary" onClick="cartLS.remove(${item.id}),removeAll(${item.quantity})">Delete</Button></td>
+					</tr>`).join("")
+
+           var state= $total.innerHTML = "$" + cartLS.total();
+            var check="$0";
+            if(state != check){
+                document.getElementById("checkout").style.display="block";
+            }else{document.getElementById("checkout").style.display="none";}
+		}
+		renderCart(cartLS.list())
+		cartLS.onChange(renderCart)
+	</script>
+		<!-- Scripts -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ASEvbui_XgpigUu9IEtLAoWgTx8-XLtCuYWZvEnjvYVdrHKjshqfGJmqxguTNaZIOpPNWxBwVotSkJl8"> // Replace YOUR_SB_CLIENT_ID with your sandbox client ID
+    </script>
+        <script src="https://www.paypal.com/sdk/js?client-id=ASEvbui_XgpigUu9IEtLAoWgTx8-XLtCuYWZvEnjvYVdrHKjshqfGJmqxguTNaZIOpPNWxBwVotSkJl8&currency=EUR"></script>
+            <script src="assets/js/cart.js"></script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
