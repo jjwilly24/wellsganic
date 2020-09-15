@@ -2,26 +2,24 @@
 
 <html>
 	<head>
-		<title>Cart</title>
+		<title>Checkout</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+        <link rel="stylesheet" href="assets/css/checkout.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 	<script src="https://unpkg.com/cart-localstorage@1.1.4/dist/cart-localstorage.min.js" type="text/javascript"></script>
 	</head>
-	<body onload="limit()" class="is-preload">
+	<body onload="load()" class="is-preload">
 
 		<!-- Wrapper -->
 			<div id="wrapper">
-<!-- Intro -->
-                <div style="height: 40px" class="cartMenu1" >
-			
-					</div><br>
+
 				<!-- Header -->
 					<header id="header">
-						<a href="index.html" class="logo"><img class="logoImg" src="images/Logo.jpeg"></a>
+						<a href="index.html" class="logo"><img style="width: 130px;height: auto" src="images/Logo.jpeg"></a>
 					</header>
 
 				<!-- Nav -->
@@ -37,10 +35,7 @@
                 
 				<!-- Main -->
 					<div id="main">
-                            	<div class="card mb-4 shadow-sm">
-			<div class="card-header">
-				<h2>Cart</h2>
-			</div>
+            <div class="card mb-4 shadow-sm">
 			<div style="overflow-x:auto;" class="card-body">
 				<table class="table">
 					<tbody class="cart">
@@ -56,21 +51,85 @@
 					</tfoot>
 				</table>
 			</div>
+    <div id="checkout" style="text-align: center; display: none" >
+        <div> <div id="paypal-button"></div></div>
+    </div>
 		</div>
-    <div id="checkout" style="text-align: right; display: none" >
-        <div> <button onclick="choose()">Checkout</button></div>
-    </div>               
-    
-<div><p style="color: white">>>>>>>></p></div>
-					</div>
+      
 
-						<!-- Copyright -->
-					<div id="copyright">
-						<ul><li>&copy; Wellsganic Organic Skincare</li><li>Design: <a href="#">Joey Williamson</a></li></ul>
-					</div>
-			</div>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+     
+  paypal.Button.render({
+    // Configure environment
+    env: 'sandbox',
+    client: {
+      sandbox: 'ASEvbui_XgpigUu9IEtLAoWgTx8-XLtCuYWZvEnjvYVdrHKjshqfGJmqxguTNaZIOpPNWxBwVotSkJl8',
+      production: 'demo_production_client_id'
+    },
+    // Customize button (optional)
+    locale: 'en_US',
+    style: {
+      size: 'small',
+      color: 'gold',
+      shape: 'pill',
+    },
 
+    // Enable Pay Now checkout flow (optional)
+    commit: true,
 
+    // Set up a payment
+ payment: function(data, actions) {
+  return actions.payment.create({
+    transactions: [{
+      amount: {
+        total: localStorage.getItem("total"),
+        currency: 'EUR',
+        details: {
+          subtotal: localStorage.getItem("subtotal"),
+          tax: '0.00',
+          shipping: '3.75',
+          handling_fee: '0.00',
+          shipping_discount: '0.00',
+          insurance: '0.00'
+        }
+      },
+      description: 'The payment transaction description.',
+      custom: '90048630024435',
+      //invoice_number: '12345', Insert a unique invoice number
+      payment_options: {
+        allowed_payment_method: 'INSTANT_FUNDING_SOURCE'
+      },
+        
+      soft_descriptor: 'ECHI5786786',
+      item_list: {
+        items: [
+            {
+          name: localStorage.getItem("name0"),
+          description: '',
+          quantity: localStorage.getItem("quantity0"),
+          price: localStorage.getItem("price0"),
+          tax: '0.00',
+          sku: localStorage.getItem("sku0"),
+          currency: 'EUR'
+        },
+        ],
+      }
+    }],
+    note_to_payer: 'Contact us for any questions on your order.'
+  });
+},
+    // Execute the payment
+    onAuthorize: function(data, actions) {
+      return actions.payment.execute().then(function() {
+        // Show a confirmation message to the buyer
+        window.localStorage.clear();
+            window.location.href='finish.html'
+      });
+    }
+  }, '#paypal-button');
+
+</script>
 <script>
 		function renderCart(items) {
 			const $cart = document.querySelector(".cart")
@@ -83,16 +142,10 @@
 						<td>#${item.id}</td>
 						<td>${item.name}</td>
 						<td onclick="addCounter(${item.quantity})">${item.quantity}</td>
-						<td style="width: 60px;">	
-							<button type="button" class="btn btn-block btn-sm btn-outline-primary"
-								onClick="cartLS.quantity(${item.id},-1),removeCounter()">-</button>
-						</td>
-						<td style="width: 60px;">	
-							<button type="button" class="btn btn-block btn-sm btn-outline-primary"
-                                onClick="cartLS.quantity(${item.id},1),addCounter()">+</button>	
-						</td>
+						<td></td>
+						<td></td>
 						<td class="text-right">$${item.price}</td>
-						<td class="text-right"><Button class="btn btn-primary" onClick="cartLS.remove(${item.id}),removeAll(${item.quantity})">Delete</Button></td>
+						
 					</tr>`).join("")
             var totalInt=parseFloat(cartLS.total());
             var totalInt1=totalInt + 3.75;
@@ -106,6 +159,14 @@
 		renderCart(cartLS.list())
 		cartLS.onChange(renderCart)
 	</script>
+                        
+					</div>
+
+						<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Wellsganic Organic Skincare</li><li>Design: <a href="#">Joey Williamson</a></li></ul>
+					</div>
+			</div>
 
 		<!-- Scripts -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -117,8 +178,6 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-        <!--paypal-->
-
 
 	</body>
 </html>
